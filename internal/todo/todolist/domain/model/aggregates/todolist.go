@@ -1,8 +1,8 @@
 package aggregates
 
 import (
-	"github.com/foroto/go-todo/internal/todo/todolist/domain/commands"
-	"github.com/foroto/go-todo/internal/todo/todolist/domain/model/entities"
+	"github.com/forgoty/go-todo/internal/todo/todolist/domain/commands"
+	"github.com/forgoty/go-todo/internal/todo/todolist/domain/model/entities"
 	"github.com/google/uuid"
 )
 

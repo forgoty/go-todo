@@ -2,6 +2,7 @@ package todolist
 
 import (
 	"fmt"
+
 	"github.com/foroto/go-todo/internal/todo/todolist/domain/model/aggregates"
 	"github.com/google/uuid"
 )

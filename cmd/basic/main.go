@@ -1,7 +1,11 @@
 package main
 
 import (
-	"github.com/forgoty/go-todo/pkg/todo/todolist/interfaces/rest/todolist"
+	"fmt"
+
+	"github.com/forgoty/go-todo/pkg/todo/todolist/interfaces/rest"
 )
 
-func main() {}
+func main() {
+	fmt.Println(rest.NewTodoListController())
+}

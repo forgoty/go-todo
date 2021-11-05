@@ -12,7 +12,6 @@ services:
     command: tail -f /dev/null
     volumes:
       - ./.:/go/src/github.com/forgoty/go-todo
-      - ~/.ssh/forgoty:/root/.ssh/id_rsa
 
 networks:
   go-app-network:

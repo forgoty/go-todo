@@ -1,8 +1,8 @@
 package commandservices
 
 import (
-	"github.com/foroto/go-todo/internal/todo/todolist/domain/commands"
-	"github.com/foroto/go-todo/internal/todo/todolist/domain/model/aggregates"
+	"github.com/forgoty/go-todo/pkg/todo/todolist/domain/commands"
+	"github.com/forgoty/go-todo/pkg/todo/todolist/domain/model/aggregates"
 )
 
 type CreateToDoListCommandHandler struct {

@@ -2,8 +2,8 @@ package application
 
 import (
 	"fmt"
-	"github.com/foroto/go-todo/internal/todo/todolist/application/internal/commandservices"
-	"github.com/foroto/go-todo/internal/todo/todolist/application/internal/queryservices"
+	"github.com/forgoty/go-todo/pkg/todo/todolist/application/pkg/commandservices"
+	"github.com/forgoty/go-todo/pkg/todo/todolist/application/pkg/queryservices"
 )
 
 type Application struct {

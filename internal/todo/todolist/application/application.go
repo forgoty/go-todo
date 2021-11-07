@@ -1,8 +1,8 @@
 package application
 
 import (
-	"github.com/forgoty/go-todo/pkg/todo/todolist/application/internal/commandservices"
-	"github.com/forgoty/go-todo/pkg/todo/todolist/application/internal/queryservices"
+	"github.com/forgoty/go-todo/internal/todo/todolist/application/internal/commandservices"
+	"github.com/forgoty/go-todo/internal/todo/todolist/application/internal/queryservices"
 )
 
 type Application struct {

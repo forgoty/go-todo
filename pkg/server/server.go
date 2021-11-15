@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/google/wire"
 	"sync"
 
 	"github.com/forgoty/go-todo/pkg/api"
@@ -17,21 +16,11 @@ type Server struct {
 	shutdownOnce     sync.Once
 	shutdownFinished chan struct{}
 	isInitialized    bool
-	mtx              sync.Mutex
-	version          string
 	HTTPServer       *api.HTTPServer
 }
 
-var wireBasicSet = wire.NewSet(
-	api.ProvideHTTPServer,
-)
-
-func Initialize(port string) (*Server, error) {
-	wire.Build(wireBasicSet)
-	return &Server{}, nil
-}
-
 func New(port string) (*Server, error) {
+	// We could add some new backgraund services here in future
 	httpServer, err := api.ProvideHTTPServer()
 	if err != nil {
 		return &Server{}, err

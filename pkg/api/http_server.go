@@ -20,11 +20,13 @@ type HTTPServer struct {
 }
 
 func ProvideHTTPServer() (*HTTPServer, error) {
-	return &HTTPServer{
+	hs := &HTTPServer{
 		httpSrv:       nil,
 		web:           web.New(),
-		RouteRegister: &routing.RouteRegisterImpl{},
-	}, nil
+		RouteRegister: routing.NewRouteRegister(),
+	}
+	hs.registerRoutes()
+	return hs, nil
 }
 
 func (hs *HTTPServer) Run(ctx context.Context, port string) error {
@@ -62,9 +64,4 @@ func (hs *HTTPServer) Run(ctx context.Context, port string) error {
 
 func (hs *HTTPServer) applyRoutes() {
 	hs.RouteRegister.Register(hs.web.Router())
-	handle := func(ctx web.Context) error {
-		return ctx.String(http.StatusOK, "Hello world\n")
-	}
-
-	hs.RouteRegister.Get("/", handle)
 }

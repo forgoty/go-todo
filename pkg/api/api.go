@@ -2,8 +2,9 @@ package api
 
 import (
 	"fmt"
-	"github.com/forgoty/go-todo/pkg/web"
 	"net/http"
+
+	"github.com/forgoty/go-todo/pkg/web"
 )
 
 func (hs *HTTPServer) registerRoutes() {

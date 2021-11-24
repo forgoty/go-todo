@@ -9,21 +9,24 @@ import (
 	"sync"
 
 	"github.com/forgoty/go-todo/pkg/api/routing"
+	"github.com/forgoty/go-todo/pkg/services/contexthandler"
 	"github.com/forgoty/go-todo/pkg/web"
 )
 
 type HTTPServer struct {
-	context       context.Context
-	httpSrv       *http.Server
-	RouteRegister routing.RouteRegister
-	web           *web.Handler
+	context        context.Context
+	httpSrv        *http.Server
+	RouteRegister  routing.RouteRegister
+	ContextHandler *contexthandler.ContextHandler
+	web            *web.Handler
 }
 
 func ProvideHTTPServer() (*HTTPServer, error) {
 	hs := &HTTPServer{
-		httpSrv:       nil,
-		web:           web.New(),
-		RouteRegister: routing.NewRouteRegister(),
+		httpSrv:        nil,
+		web:            web.New(),
+		RouteRegister:  routing.NewRouteRegister(),
+		ContextHandler: &contexthandler.ContextHandler{},
 	}
 	hs.registerRoutes()
 	return hs, nil
@@ -63,5 +66,13 @@ func (hs *HTTPServer) Run(ctx context.Context, port string) error {
 }
 
 func (hs *HTTPServer) applyRoutes() {
+	hs.addMiddlewares()
 	hs.RouteRegister.Register(hs.web.Router())
+}
+
+func (hs *HTTPServer) addMiddlewares() {
+	m := hs.web
+
+	m.Use(hs.ContextHandler.Middleware)
+	m.Use(hs.ContextHandler.MiddlewareH)
 }

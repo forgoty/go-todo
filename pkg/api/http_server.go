@@ -75,4 +75,6 @@ func (hs *HTTPServer) applyRoutes() {
 func (hs *HTTPServer) addMiddlewares() {
 	m := hs.web
 	m.Use(hs.ContextHandler.Middleware)
+	m.Use(web.MiddlewareLogger())
+	m.Use(web.MiddlewareRecover())
 }

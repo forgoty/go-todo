@@ -3,12 +3,12 @@ package api
 import (
 	"context"
 	"errors"
-	"fmt"
 	"net"
 	"net/http"
 	"sync"
 
 	"github.com/forgoty/go-todo/pkg/api/routing"
+	"github.com/forgoty/go-todo/pkg/infrastructure/logger"
 	"github.com/forgoty/go-todo/pkg/services/contexthandler"
 	"github.com/forgoty/go-todo/pkg/web"
 )
@@ -19,6 +19,7 @@ type HTTPServer struct {
 	RouteRegister  routing.RouteRegister
 	ContextHandler *contexthandler.ContextHandler
 	web            *web.Handler
+	log            logger.Logger
 }
 
 func ProvideHTTPServer() (*HTTPServer, error) {
@@ -27,6 +28,7 @@ func ProvideHTTPServer() (*HTTPServer, error) {
 		web:            web.New(),
 		RouteRegister:  routing.NewRouteRegister(),
 		ContextHandler: &contexthandler.ContextHandler{},
+		log:            logger.New("httpserver"),
 	}
 	hs.registerRoutes()
 	return hs, nil
@@ -48,13 +50,13 @@ func (hs *HTTPServer) Run(ctx context.Context, port string) error {
 
 		<-ctx.Done()
 		if err := hs.httpSrv.Shutdown(context.Background()); err != nil {
-			fmt.Printf("Failed to shutdown server. Error: %s\n", err.Error())
+			hs.log.Error("Failed to shutdown server. Error: %s\n", err.Error())
 		}
 	}()
 
 	if err := hs.httpSrv.ListenAndServe(); err != nil {
 		if errors.Is(err, http.ErrServerClosed) {
-			fmt.Println("Server was shutdown gracefully")
+			hs.log.Info("Server was shutdown gracefully")
 			return nil
 		}
 		return err
@@ -72,7 +74,5 @@ func (hs *HTTPServer) applyRoutes() {
 
 func (hs *HTTPServer) addMiddlewares() {
 	m := hs.web
-
 	m.Use(hs.ContextHandler.Middleware)
-	m.Use(hs.ContextHandler.MiddlewareH)
 }

@@ -7,6 +7,7 @@ import (
 	"sync"
 
 	"github.com/forgoty/go-todo/pkg/api"
+	"github.com/forgoty/go-todo/pkg/infrastructure/logger"
 )
 
 type Server struct {
@@ -17,6 +18,7 @@ type Server struct {
 	shutdownFinished chan struct{}
 	isInitialized    bool
 	HTTPServer       *api.HTTPServer
+	log              logger.Logger
 }
 
 func New(port string) (*Server, error) {
@@ -33,6 +35,7 @@ func New(port string) (*Server, error) {
 		HTTPServer:       httpServer,
 		shutdownFn:       shutdownFn,
 		shutdownFinished: make(chan struct{}),
+		log:              logger.New("server"),
 	}
 	s.isInitialized = true
 
@@ -44,8 +47,8 @@ func (s *Server) Run() error {
 
 	err := s.HTTPServer.Run(s.context, s.port)
 	if err != nil && !errors.Is(err, context.Canceled) {
-		fmt.Printf("Stopped background service. Reason %s\n", err.Error())
-		return fmt.Errorf("run error: %w\n", err)
+		s.log.Error("Stopped background service. Reason %s", err.Error())
+		return fmt.Errorf("run error: %w", err)
 	}
 	return err
 }
@@ -53,16 +56,16 @@ func (s *Server) Run() error {
 func (s *Server) Shutdown(ctx context.Context, reason string) error {
 	var err error
 	s.shutdownOnce.Do(func() {
-		fmt.Printf("\nShutdown started. Reason: %s\n", reason)
+		s.log.Info("Shutdown started. Reason: %s", reason)
 		// Call cancel func to stop services.
 		s.shutdownFn()
 		// Wait for server to shut down
 		select {
 		case <-s.shutdownFinished:
-			fmt.Println("Finished waiting for server to shut down")
+			s.log.Info("Finished waiting for server to shut down")
 		case <-ctx.Done():
-			fmt.Println("Timed out while waiting for server to shut down")
-			err = fmt.Errorf("timeout waiting for shutdown\n")
+			s.log.Error("Timed out while waiting for server to shut down")
+			err = fmt.Errorf("timeout waiting for shutdown")
 		}
 	})
 

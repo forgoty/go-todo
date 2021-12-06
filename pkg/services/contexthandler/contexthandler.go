@@ -11,7 +11,9 @@ type ContextHandler struct {
 
 func (h *ContextHandler) Middleware(next web.HandlerFunc) web.HandlerFunc {
 	return func(c web.Context) error {
-		reqContext := models.NewContext(c)
+		reqContext := &models.ReqContext{
+			Context: c,
+		}
 		reqContext.Logger().SetPrefix("context")
 		reqContext.Logger().SetLevel(2) // INFO
 

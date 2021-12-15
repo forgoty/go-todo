@@ -14,8 +14,6 @@ func (h *ContextHandler) Middleware(next web.HandlerFunc) web.HandlerFunc {
 		reqContext := &models.ReqContext{
 			Context: c,
 		}
-		reqContext.Logger().SetPrefix("context")
-		reqContext.Logger().SetLevel(2) // INFO
 
 		switch {
 		case h.initContextWithAnonymousUser(reqContext):

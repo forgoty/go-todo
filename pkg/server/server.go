@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"sync"
 
+	userapp "github.com/forgoty/go-todo/internal/user/app"
 	"github.com/forgoty/go-todo/pkg/api"
 	"github.com/forgoty/go-todo/pkg/infrastructure/logger"
 )
@@ -23,7 +24,8 @@ type Server struct {
 
 func New(port string) (*Server, error) {
 	// We could add some new backgraund services here in future
-	httpServer, err := api.ProvideHTTPServer()
+	userApp := userapp.NewUserApplication()
+	httpServer, err := api.ProvideHTTPServer(userApp)
 	if err != nil {
 		return &Server{}, err
 	}

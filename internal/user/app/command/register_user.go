@@ -1,6 +1,5 @@
 package command
 
 type RegisterUserCommand struct {
-	Username string
-	Password string
+	Username string `json:"username"`
 }

@@ -1,8 +1,7 @@
 package handler
 
 import (
-	"errors"
-
+	"github.com/forgoty/go-todo/internal/user/app/command"
 	"github.com/forgoty/go-todo/internal/user/domain/user"
 	"github.com/forgoty/go-todo/pkg/infrastructure/logger"
 )
@@ -19,4 +18,7 @@ func NewRegisterUserHandler(repo user.IUserRepository, log logger.Logger) *Regis
 	}
 }
 
-func (h *RegisterUserHandler) Handle() error { return errors.New("Not Implemented") }
+func (h *RegisterUserHandler) Handle(c command.RegisterUserCommand) error {
+	h.log.Info("Register " + c.Username)
+	return nil
+}

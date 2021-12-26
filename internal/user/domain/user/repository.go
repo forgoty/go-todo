@@ -1,5 +1,5 @@
 package user
 
 type IUserRepository interface {
-	FindOneById(id string) *User
+	FindOneById(id string) (*User, error)
 }

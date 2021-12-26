@@ -23,3 +23,8 @@ func (r *InMemoryUserRepository) FindOneById(id string) (*user.User, error) {
 	}
 	return u, nil
 }
+
+func (r *InMemoryUserRepository) Create(u user.User) error {
+	r.users[u.Id] = &u
+	return nil
+}

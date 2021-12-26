@@ -1,3 +1,6 @@
 package user
 
-type User struct{}
+type User struct {
+	Id       string
+	Username string
+}

@@ -5,6 +5,7 @@ import (
 
 	"github.com/forgoty/go-todo/internal/user/app/command"
 	"github.com/forgoty/go-todo/internal/user/app/query"
+	"github.com/forgoty/go-todo/pkg/models"
 	"github.com/forgoty/go-todo/pkg/web"
 	"github.com/google/uuid"
 )
@@ -17,30 +18,46 @@ func (hs *HTTPServer) addUserRoutes() {
 }
 
 func (hs *HTTPServer) signin(ctx web.Context) error {
-	q := &query.GetUserQuery{}
-	if err := ctx.Bind(q); err != nil {
+	dto := &models.UserSignInSignUp{}
+	if err := ctx.Bind(dto); err != nil {
 		return err
 	}
-	u, err := hs.UserApp.Queries.GetUser.Handle(*q)
+	encryptedPassword := hs.AuthService.GeneratePasswordHash(dto.Password)
+
+	q := query.FindUserBySigninQuery{
+		Username: dto.Username,
+		Password: encryptedPassword,
+	}
+	u, err := hs.UserApp.Queries.FindUserBySignin.Handle(q)
 	if err != nil {
 		return err
 	}
-	return ctx.JSON(http.StatusOK, u)
+	token, err := hs.AuthService.GenerateToken(u.Id)
+	if err != nil {
+		return err
+	}
+	return ctx.JSON(http.StatusOK, map[string]string{"token": token})
 }
 
 func (hs *HTTPServer) signup(ctx web.Context) error {
-	id := uuid.New().String()
-	c := &command.RegisterUserCommand{
-		Id: id,
+	dto := &models.UserSignInSignUp{}
+
+	if err := ctx.Bind(dto); err != nil {
+		return err
 	}
 
-	if err := ctx.Bind(c); err != nil {
-		return err
+	encryptedPassword := hs.AuthService.GeneratePasswordHash(dto.Password)
+
+	id := uuid.New().String()
+	c := &command.RegisterUserCommand{
+		Id:           id,
+		Username:     dto.Username,
+		PasswordHash: encryptedPassword,
 	}
 
 	err := hs.UserApp.Commands.RegiseterUser.Handle(*c)
 	if err != nil {
 		return err
 	}
-	return ctx.String(http.StatusCreated, id)
+	return ctx.NoContent(http.StatusCreated)
 }

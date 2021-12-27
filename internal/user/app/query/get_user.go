@@ -1,16 +1,13 @@
 package query
 
 import (
+	"github.com/forgoty/go-todo/internal/user/app/query/models"
 	"github.com/forgoty/go-todo/internal/user/domain/user"
 	"github.com/forgoty/go-todo/pkg/infrastructure/logger"
 )
 
 type GetUserQuery struct {
 	Id string `json:"id"`
-}
-
-type UserDto struct {
-	Username string `json:"username"`
 }
 
 type GetUserQueryHandler struct {
@@ -25,12 +22,12 @@ func NewGetUserQueryHandler(repo user.IUserRepository, log logger.Logger) *GetUs
 	}
 }
 
-func (h *GetUserQueryHandler) Handle(q GetUserQuery) (*UserDto, error) {
+func (h *GetUserQueryHandler) Handle(q GetUserQuery) (*models.UserDto, error) {
 	u, err := h.userRepo.FindOneById(q.Id)
 	if err != nil {
 		return nil, err
 	}
-	return &UserDto{
+	return &models.UserDto{
 		Username: u.Username,
 	}, nil
 }

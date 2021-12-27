@@ -8,8 +8,9 @@ import (
 )
 
 type RegisterUserCommand struct {
-	Id       string `json:"-"`
-	Username string `json:"username"`
+	Id           string
+	Username     string
+	PasswordHash string
 }
 
 type RegisterUserCommandHandler struct {
@@ -26,8 +27,9 @@ func NewRegisterUserCommandHandler(repo user.IUserRepository, log logger.Logger)
 
 func (h *RegisterUserCommandHandler) Handle(c RegisterUserCommand) error {
 	user := user.User{
-		Id:       c.Id,
-		Username: c.Username,
+		Id:           c.Id,
+		Username:     c.Username,
+		PasswordHash: c.PasswordHash,
 	}
 	if err := h.userRepo.Create(user); err != nil {
 		return errors.New("Cannot Create user")

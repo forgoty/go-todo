@@ -1,14 +1,12 @@
 package models
 
-import "time"
-
 type SignedInUser struct {
-	UserId      int64
-	Login       string
-	Name        string
-	Email       string
-	ApiKeyId    int64
-	OrgCount    int
+	UserId      string
+	Username    string
 	IsAnonymous bool
-	LastSeenAt  time.Time
+}
+
+type UserSignInSignUp struct {
+	Username string `json:"username" binding:"required"`
+	Password string `json:"password" binding:"required"`
 }

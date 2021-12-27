@@ -17,7 +17,8 @@ type Commands struct {
 }
 
 type Queries struct {
-	GetUser *query.GetUserQueryHandler
+	FindUserBySignin *query.FindUserBySigninQueryHandler
+	GetUser          *query.GetUserQueryHandler
 }
 
 func NewUserApplication() *Application {
@@ -29,7 +30,8 @@ func NewUserApplication() *Application {
 		),
 	}
 	queries := &Queries{
-		GetUser: query.NewGetUserQueryHandler(user_repo, logger.New("getuser")),
+		FindUserBySignin: query.NewFindUserBySigninQueryHandler(user_repo, logger.New("finduserbysignin")),
+		GetUser:          query.NewGetUserQueryHandler(user_repo, logger.New("getuser")),
 	}
 	return &Application{
 		Commands: commands,

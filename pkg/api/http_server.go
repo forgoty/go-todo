@@ -6,10 +6,12 @@ import (
 	"net"
 	"net/http"
 	"sync"
+	"time"
 
 	userapp "github.com/forgoty/go-todo/internal/user/app"
 	"github.com/forgoty/go-todo/pkg/api/routing"
 	"github.com/forgoty/go-todo/pkg/infrastructure/logger"
+	"github.com/forgoty/go-todo/pkg/services/auth"
 	"github.com/forgoty/go-todo/pkg/services/contexthandler"
 	"github.com/forgoty/go-todo/pkg/web"
 )
@@ -19,17 +21,21 @@ type HTTPServer struct {
 	httpSrv        *http.Server
 	RouteRegister  routing.RouteRegister
 	ContextHandler *contexthandler.ContextHandler
+	AuthService    *auth.AuthService
 	web            *web.Handler
 	log            logger.Logger
 	UserApp        *userapp.Application
 }
 
 func ProvideHTTPServer(userApp *userapp.Application) (*HTTPServer, error) {
+	authService := auth.NewAuthService("123", "123", 12*time.Hour)
+	contextHandler := contexthandler.NewContextHandler(userApp, authService, logger.New("contexthandler"))
 	hs := &HTTPServer{
 		httpSrv:        nil,
 		web:            web.New(),
 		RouteRegister:  routing.NewRouteRegister(),
-		ContextHandler: &contexthandler.ContextHandler{},
+		ContextHandler: contextHandler,
+		AuthService:    authService,
 		log:            logger.New("httpserver"),
 		UserApp:        userApp,
 	}

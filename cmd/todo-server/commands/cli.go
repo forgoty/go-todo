@@ -29,7 +29,7 @@ func RunCli(versionArg string) int {
 		fmt.Printf("Version is %s\n", versionArg)
 		return 0
 	}
-	s, err := server.New(*port)
+	s, err := server.ProvideServer(*port)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Failed to start todo server. error: %s\n", err)
 		return 1

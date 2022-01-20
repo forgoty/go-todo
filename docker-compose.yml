@@ -4,6 +4,7 @@ services:
   todo-app:
     container_name: todo-app
     build:
+      dockerfile: docker/local-dev/Dockerfile
       context: .
     ports:
       - "8000:8000"

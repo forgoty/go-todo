@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"sync"
 
-	userapp "github.com/forgoty/go-todo/internal/user/app"
 	"github.com/forgoty/go-todo/pkg/api"
 	"github.com/forgoty/go-todo/pkg/infrastructure/logger"
 )
@@ -22,26 +21,18 @@ type Server struct {
 	log              logger.Logger
 }
 
-func New(port string) (*Server, error) {
-	// We could add some new backgraund services here in future
-	userApp := userapp.NewUserApplication()
-	httpServer, err := api.ProvideHTTPServer(userApp)
-	if err != nil {
-		return &Server{}, err
-	}
+func NewProvide(port string, hs *api.HTTPServer) *Server {
 	rootCtx, shutdownFn := context.WithCancel(context.Background())
-
 	s := &Server{
 		port:             port,
 		context:          rootCtx,
-		HTTPServer:       httpServer,
+		HTTPServer:       hs,
 		shutdownFn:       shutdownFn,
 		shutdownFinished: make(chan struct{}),
 		log:              logger.New("server"),
+		isInitialized:    true,
 	}
-	s.isInitialized = true
-
-	return s, nil
+	return s
 }
 
 func (s *Server) Run() error {

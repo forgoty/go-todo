@@ -19,4 +19,8 @@ stop:
 dsh:
 	dsh todo-app
 
+.PHONY: wire
+wire:
+	./scripts/wire_generate.sh
+
 .DEFAULT_GOAL := build

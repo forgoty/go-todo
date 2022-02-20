@@ -6,9 +6,9 @@ import (
 
 	userapp "github.com/forgoty/go-todo/internal/user/app"
 	userquery "github.com/forgoty/go-todo/internal/user/app/query"
+	"github.com/forgoty/go-todo/internal/user/service/auth"
 	"github.com/forgoty/go-todo/pkg/infrastructure/logger"
 	"github.com/forgoty/go-todo/pkg/models"
-	"github.com/forgoty/go-todo/pkg/services/auth"
 	"github.com/forgoty/go-todo/pkg/web"
 )
 
@@ -18,11 +18,11 @@ type ContextHandler struct {
 	logger      logger.Logger
 }
 
-func NewContextHandler(u *userapp.Application, a *auth.AuthService, l logger.Logger) *ContextHandler {
+func NewContextHandler(u *userapp.Application, a *auth.AuthService) *ContextHandler {
 	return &ContextHandler{
 		userApp:     u,
 		authService: a,
-		logger:      l,
+		logger:      logger.New("contexthandler"),
 	}
 }
 

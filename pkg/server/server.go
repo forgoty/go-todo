@@ -21,7 +21,7 @@ type Server struct {
 	log              logger.Logger
 }
 
-func NewProvide(port string, hs *api.HTTPServer) *Server {
+func NewServer(port string, hs *api.HTTPServer) *Server {
 	rootCtx, shutdownFn := context.WithCancel(context.Background())
 	s := &Server{
 		port:             port,

@@ -8,7 +8,12 @@ import (
 )
 
 func (hs *HTTPServer) registerRoutes() {
-	r := hs.RouteRegister
+	r := hs.routeRegister
+	m := hs.web
+
+	m.Use(web.MiddlewareLogger())
+	m.Use(web.MiddlewareRecover())
+
 	handle := func(ctx web.Context) error {
 		fmt.Println(ctx.Path())
 		return ctx.String(http.StatusOK, "Hello world\n")
@@ -17,4 +22,6 @@ func (hs *HTTPServer) registerRoutes() {
 
 	//User
 	hs.addUserRoutes()
+
+	hs.routeRegister.Register(hs.web.Router())
 }

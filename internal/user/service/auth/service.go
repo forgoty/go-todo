@@ -13,14 +13,16 @@ type tokenClaims struct {
 	jwt.StandardClaims
 	UserId string `json:"user_id"`
 }
+type Salt string
+type SignInKey string
 
 type AuthService struct {
-	signinKey string
-	salt      string
+	signinKey SignInKey
+	salt      Salt
 	tokenTTL  time.Duration
 }
 
-func NewAuthService(salt, signinKey string, tokenTTL time.Duration) *AuthService {
+func NewAuthService(salt Salt, signinKey SignInKey, tokenTTL time.Duration) *AuthService {
 	return &AuthService{
 		salt:      salt,
 		signinKey: signinKey,

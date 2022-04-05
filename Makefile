@@ -1,6 +1,6 @@
 .PHONY: build
 build:
-	go build .
+	go build cmd/todo-server/main.go
 
 .PHONY: test
 test:
@@ -22,5 +22,9 @@ dsh:
 .PHONY: wire
 wire:
 	./scripts/wire_generate.sh
+
+.PHONY: swagger
+swagger:
+	./scripts/generate_swagger.sh
 
 .DEFAULT_GOAL := build

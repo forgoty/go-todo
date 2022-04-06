@@ -3,7 +3,7 @@ Simple To-Do list. Only for educational purposes
 
 # build
 ```sh
-make wire && make
+make
 ```
 
 # Generate API Schema

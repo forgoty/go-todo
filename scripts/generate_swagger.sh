@@ -1,2 +1,2 @@
 #/usr/bin/sh
-swag init --parseDependency -g cmd/todo-server/main.go
+swag init --parseDependency --output api/ -g cmd/todo-server/main.go

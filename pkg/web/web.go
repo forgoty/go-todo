@@ -2,6 +2,7 @@ package web
 
 import (
 	"github.com/labstack/echo/v4"
+	echoSwagger "github.com/swaggo/echo-swagger"
 )
 
 type Context = echo.Context
@@ -13,3 +14,4 @@ type Response = echo.Response
 type Logger = echo.Logger
 
 var New = echo.New
+var SwaggerHander = echoSwagger.WrapHandler

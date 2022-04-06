@@ -1,5 +1,5 @@
 .PHONY: build
-build:
+build:	wire
 	go build cmd/todo-server/main.go
 
 .PHONY: test
@@ -26,5 +26,9 @@ wire:
 .PHONY: swagger
 swagger:
 	./scripts/generate_swagger.sh
+
+.PHONY: delete_wire
+delete_wire:
+	find . -name "*_gen.go" -exec rm -f {} \;
 
 .DEFAULT_GOAL := build

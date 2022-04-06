@@ -7,7 +7,6 @@ COPY . .
 
 # Generate code
 RUN go get github.com/google/wire/cmd/wire && ./scripts/wire_generate.sh
-RUN go install github.com/swaggo/swag/cmd/swag@latest && ./scripts/generate_swagger.sh
 
 # Build
 RUN go build -o app cmd/todo-server/main.go

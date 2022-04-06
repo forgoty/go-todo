@@ -1,0 +1,74 @@
+definitions:
+  models.APIError:
+    properties:
+      message:
+        type: string
+    type: object
+  models.Token:
+    properties:
+      token:
+        type: string
+    type: object
+  models.UserSignInSignUp:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
+info:
+  contact: {}
+  description: Basic ToDo Application.
+  title: ToDo application
+  version: 1.0.0
+paths:
+  /api/v1/signin:
+    post:
+      consumes:
+      - application/json
+      description: User sign-in
+      parameters:
+      - description: Username and password
+        in: body
+        name: UserSignIn
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserSignInSignUp'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: JWT Token
+          schema:
+            $ref: '#/definitions/models.Token'
+        "400":
+          description: API Error
+          schema:
+            $ref: '#/definitions/models.APIError'
+      summary: User sign-in
+  /api/v1/signup:
+    post:
+      consumes:
+      - application/json
+      description: User sign-up by username and password.
+      parameters:
+      - description: Username and password
+        in: body
+        name: UserSignUp
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserSignInSignUp'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: User signed up successfully
+        "400":
+          description: API Error
+          schema:
+            $ref: '#/definitions/models.APIError'
+      summary: User sign-up
+swagger: "2.0"

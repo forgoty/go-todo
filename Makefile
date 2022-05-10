@@ -1,5 +1,8 @@
+.PHONY: build-all
+build-all: wire build
+
 .PHONY: build
-build:	wire
+build:
 	go build cmd/todo-server/main.go
 
 .PHONY: test

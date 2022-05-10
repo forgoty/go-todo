@@ -2,7 +2,7 @@ package query
 
 import (
 	"github.com/forgoty/go-todo/internal/user/app/query/models"
-	"github.com/forgoty/go-todo/internal/user/domain/user"
+	"github.com/forgoty/go-todo/internal/user/domain/user/aggregates"
 	"github.com/forgoty/go-todo/pkg/infrastructure/logger"
 )
 
@@ -12,13 +12,13 @@ type GetUserQuery struct {
 
 type GetUserQueryHandler struct {
 	log      logger.Logger
-	userRepo user.IUserRepository
+	userRepo aggregates.IUserRepository
 }
 
-func NewGetUserQueryHandler(repo user.IUserRepository, log logger.Logger) *GetUserQueryHandler {
+func ProvideGetUserQueryHandler(repo aggregates.IUserRepository) *GetUserQueryHandler {
 	return &GetUserQueryHandler{
+		log:      logger.New("GetUserQueryHandler "),
 		userRepo: repo,
-		log:      log,
 	}
 }
 
@@ -28,6 +28,6 @@ func (h *GetUserQueryHandler) Handle(q GetUserQuery) (*models.UserDto, error) {
 		return nil, err
 	}
 	return &models.UserDto{
-		Username: u.Username,
+		Username: string(u.Username),
 	}, nil
 }

@@ -3,8 +3,7 @@ package rest
 import (
 	"net/http"
 
-	"github.com/forgoty/go-todo/internal/user/app/command"
-	"github.com/forgoty/go-todo/internal/user/app/query"
+	"github.com/forgoty/go-todo/internal/user/domain/user/commands"
 	"github.com/forgoty/go-todo/internal/user/interfaces/rest/models"
 	api_models "github.com/forgoty/go-todo/pkg/api/models"
 	"github.com/forgoty/go-todo/pkg/web"
@@ -23,19 +22,17 @@ import (
 func (c *userController) signin(ctx web.Context) error {
 	dto := &models.UserSignInSignUp{}
 	if err := ctx.Bind(dto); err != nil {
-		return err
+		return ctx.JSON(http.StatusBadRequest, api_models.APIError{Message: err.Error()})
 	}
-	encryptedPassword := c.authService.GeneratePasswordHash(dto.Password)
 
-	q := query.FindUserBySigninQuery{
+	command := commands.LoginUserWithJWTCommand{
 		Username: dto.Username,
-		Password: encryptedPassword,
+		Password: dto.Password,
 	}
-	u, err := c.userApp.Queries.FindUserBySignin.Handle(q)
+	token, err := c.userApp.Commands.LoginUserJWT.Handle(command)
 	if err != nil {
 		return ctx.JSON(http.StatusBadRequest, api_models.APIError{Message: err.Error()})
 	}
-	token, err := c.authService.GenerateToken(u.Id)
 	if err != nil {
 		return ctx.JSON(http.StatusBadRequest, api_models.APIError{Message: err.Error()})
 	}
@@ -55,19 +52,16 @@ func (c *userController) signup(ctx web.Context) error {
 	dto := &models.UserSignInSignUp{}
 
 	if err := ctx.Bind(dto); err != nil {
-		return err
+		return ctx.JSON(http.StatusBadRequest, api_models.APIError{Message: err.Error()})
 	}
 
-	encryptedPassword := c.authService.GeneratePasswordHash(dto.Password)
-
-	id := uuid.New().String()
-	command := &command.RegisterUserCommand{
-		Id:           id,
-		Username:     dto.Username,
-		PasswordHash: encryptedPassword,
+	command := commands.RegisterUserCommand{
+		Id:       uuid.New().String(),
+		Username: dto.Username,
+		Password: dto.Password,
 	}
 
-	err := c.userApp.Commands.RegiseterUser.Handle(*command)
+	err := c.userApp.Commands.RegiseterUser.Handle(command)
 	if err != nil {
 		return ctx.JSON(http.StatusBadRequest, api_models.APIError{Message: err.Error()})
 	}

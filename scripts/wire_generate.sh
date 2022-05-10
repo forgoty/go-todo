@@ -2,7 +2,8 @@
 makewire() {
 	wire pkg/server/*.go &&
 	wire internal/user/interfaces/rest/*.go
+	wire internal/user/app/*.go
 }
 
 
-makewire 2> /dev/null || echo "Files already generated"
+makewire

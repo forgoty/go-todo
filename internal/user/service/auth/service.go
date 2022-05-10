@@ -31,6 +31,7 @@ func NewAuthService(salt Salt, signinKey SignInKey, tokenTTL time.Duration) *Aut
 }
 
 func (s *AuthService) GeneratePasswordHash(password string) string {
+	fmt.Println(password)
 	hash := sha1.New()
 	hash.Write([]byte(password))
 	return fmt.Sprintf("%x", hash.Sum([]byte(s.salt)))

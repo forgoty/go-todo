@@ -2,7 +2,7 @@ package query
 
 import (
 	"github.com/forgoty/go-todo/internal/user/app/query/models"
-	"github.com/forgoty/go-todo/internal/user/domain/user"
+	"github.com/forgoty/go-todo/internal/user/domain/user/aggregates"
 	"github.com/forgoty/go-todo/pkg/infrastructure/logger"
 )
 
@@ -13,13 +13,13 @@ type FindUserBySigninQuery struct {
 
 type FindUserBySigninQueryHandler struct {
 	log      logger.Logger
-	userRepo user.IUserRepository
+	userRepo aggregates.IUserRepository
 }
 
-func NewFindUserBySigninQueryHandler(repo user.IUserRepository, log logger.Logger) *FindUserBySigninQueryHandler {
+func ProvideFindUserBySigninQueryHandler(repo aggregates.IUserRepository) *FindUserBySigninQueryHandler {
 	return &FindUserBySigninQueryHandler{
+		log:      logger.New("FindUserBySigninQueryHandler "),
 		userRepo: repo,
-		log:      log,
 	}
 }
 
@@ -30,6 +30,6 @@ func (h FindUserBySigninQueryHandler) Handle(q FindUserBySigninQuery) (*models.U
 	}
 	return &models.UserDto{
 		Id:       u.Id,
-		Username: u.Username,
+		Username: string(u.Username),
 	}, nil
 }

@@ -7,20 +7,20 @@ import (
 	"github.com/forgoty/go-todo/pkg/infrastructure/logger"
 )
 
-type RegisterUserCommandHandler struct {
+type LoginUserWithJWTCommandHandler struct {
 	log             logger.Logger
 	userRepo        aggregates.IUserRepository
 	registerService *register.RegisterService
 }
 
-func ProvideRegisterUserCommandHandler(ur aggregates.IUserRepository, regs *register.RegisterService) *RegisterUserCommandHandler {
-	return &RegisterUserCommandHandler{
-		log:             logger.New("RegisterUserCommandHandler"),
+func ProvideLoginUserWithJWTCommandHandler(ur aggregates.IUserRepository, regs *register.RegisterService) *LoginUserWithJWTCommandHandler {
+	return &LoginUserWithJWTCommandHandler{
+		log:             logger.New("LoginUserWithJWTCommandHandler"),
 		userRepo:        ur,
 		registerService: regs,
 	}
 }
 
-func (h *RegisterUserCommandHandler) Handle(c commands.RegisterUserCommand) error {
-	return h.registerService.RegisterUser(c)
+func (h *LoginUserWithJWTCommandHandler) Handle(c commands.LoginUserWithJWTCommand) (string, error) {
+	return "", nil
 }

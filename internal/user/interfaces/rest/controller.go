@@ -4,14 +4,12 @@ import (
 	"time"
 
 	"github.com/forgoty/go-todo/internal/user/app"
-	"github.com/forgoty/go-todo/internal/user/service/auth"
 	"github.com/forgoty/go-todo/internal/user/service/contexthandler"
 	"github.com/forgoty/go-todo/pkg/api/routing"
 	"github.com/forgoty/go-todo/pkg/web"
 )
 
 type userController struct {
-	authService   *auth.AuthService
 	userApp       *app.Application
 	contextHander *contexthandler.ContextHandler
 }

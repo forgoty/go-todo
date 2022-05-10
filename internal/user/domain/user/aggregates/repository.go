@@ -1,4 +1,4 @@
-package user
+package aggregates
 
 type IUserRepository interface {
 	Create(User) error

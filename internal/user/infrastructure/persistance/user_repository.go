@@ -3,23 +3,23 @@ package persistance
 import (
 	"errors"
 
-	"github.com/forgoty/go-todo/internal/user/domain/user"
+	"github.com/forgoty/go-todo/internal/user/domain/user/aggregates"
 	"github.com/forgoty/go-todo/pkg/infrastructure/logger"
 )
 
 type InMemoryUserRepository struct {
-	users map[string]*user.User
+	users map[string]*aggregates.User
 	l     logger.Logger
 }
 
 func NewInMemoryUserRepository() *InMemoryUserRepository {
 	return &InMemoryUserRepository{
-		users: make(map[string]*user.User),
+		users: make(map[string]*aggregates.User),
 		l:     logger.New("inmemoryuserrepo"),
 	}
 }
 
-func (r *InMemoryUserRepository) FindOneById(id string) (*user.User, error) {
+func (r *InMemoryUserRepository) FindOneById(id string) (*aggregates.User, error) {
 	r.l.Info("Users DB:", r.users)
 	u, ok := r.users[id]
 	if !ok {
@@ -28,16 +28,16 @@ func (r *InMemoryUserRepository) FindOneById(id string) (*user.User, error) {
 	return u, nil
 }
 
-func (r *InMemoryUserRepository) Create(u user.User) error {
+func (r *InMemoryUserRepository) Create(u aggregates.User) error {
 	r.users[u.Id] = &u
 	r.l.Info("Users DB:", r.users)
 	return nil
 }
 
-func (r *InMemoryUserRepository) FindOneByUsernameAndPassword(username, password string) (*user.User, error) {
+func (r *InMemoryUserRepository) FindOneByUsernameAndPassword(username, password string) (*aggregates.User, error) {
 	r.l.Info("Users DB:", r.users)
 	for id := range r.users {
-		if r.users[id].Username == username && r.users[id].PasswordHash == password {
+		if r.users[id].Username.Equals(username) && r.users[id].PasswordHash == password {
 			return r.users[id], nil
 		}
 	}

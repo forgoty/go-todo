@@ -1,4 +1,4 @@
-package persistance
+package persistence
 
 import (
 	"errors"
@@ -29,7 +29,10 @@ func (r *InMemoryUserRepository) FindOneById(id string) (*aggregates.User, error
 }
 
 func (r *InMemoryUserRepository) Create(u aggregates.User) error {
-	r.users[u.Id] = &u
+	if _, ok := r.users[u.Username.String()]; ok {
+		return ErrInvalidCredsOrNotFound
+	}
+	r.users[u.Username.String()] = &u
 	r.l.Info("Users DB:", r.users)
 	return nil
 }
@@ -41,5 +44,5 @@ func (r *InMemoryUserRepository) FindOneByUsernameAndPassword(username, password
 			return r.users[id], nil
 		}
 	}
-	return nil, errors.New("Not Found!")
+	return nil, ErrInvalidCredsOrNotFound
 }

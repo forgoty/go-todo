@@ -2,7 +2,6 @@ package register
 
 import (
 	"errors"
-	"time"
 
 	"github.com/forgoty/go-todo/internal/user/domain/user/aggregates"
 	"github.com/forgoty/go-todo/internal/user/domain/user/commands"
@@ -16,13 +15,12 @@ type RegisterService struct {
 	authService *auth.AuthService
 }
 
-func NewRegisterService(userRepo aggregates.IUserRepository) *RegisterService {
-	authService := auth.NewAuthService("123", "123", 12*time.Hour)
-	log := logger.New("registerservice")
+func NewRegisterService(userRepo aggregates.IUserRepository, as *auth.AuthService) *RegisterService {
+	log := logger.New("registerService")
 	return &RegisterService{
 		log:         log,
 		userRepo:    userRepo,
-		authService: authService,
+		authService: as,
 	}
 }
 

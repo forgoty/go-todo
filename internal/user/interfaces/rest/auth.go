@@ -33,9 +33,6 @@ func (c *userController) signin(ctx web.Context) error {
 	if err != nil {
 		return ctx.JSON(http.StatusBadRequest, api_models.APIError{Message: err.Error()})
 	}
-	if err != nil {
-		return ctx.JSON(http.StatusBadRequest, api_models.APIError{Message: err.Error()})
-	}
 	return ctx.JSON(http.StatusOK, models.Token{Token: token})
 }
 

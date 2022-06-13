@@ -23,7 +23,7 @@ dsh:
 	dsh todo-app
 
 .PHONY: wire
-wire:
+wire:	delete_wire
 	./scripts/wire_generate.sh
 
 .PHONY: swagger

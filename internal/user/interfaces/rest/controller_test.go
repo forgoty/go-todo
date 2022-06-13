@@ -7,6 +7,9 @@ import (
 	"testing"
 	"time"
 
+	"github.com/forgoty/go-todo/internal/user/domain/user/aggregates"
+	"github.com/forgoty/go-todo/internal/user/infrastructure/persistence"
+	"github.com/forgoty/go-todo/internal/user/service/auth"
 	"github.com/forgoty/go-todo/pkg/web"
 	"github.com/stretchr/testify/assert"
 )
@@ -19,6 +22,12 @@ const (
 	emptyPayload       = `{}`
 	usernameIsTooShort = `{"username":"Jon","password":"jonshow1"}`
 	passwordIsTooShort = `{"username":"Jon Show","password":"jon"}`
+)
+
+const (
+	salt = auth.Salt("12")
+	key  = auth.SignInKey("123")
+	ttl  = 12 * time.Hour
 )
 
 type userControllerTest struct {
@@ -37,7 +46,8 @@ func preparePostContext(endpoint, payload string, rec *httptest.ResponseRecorder
 
 func TestUserSignUp(t *testing.T) {
 	// Setup
-	c, _ := provideUserController("123", "123", 12*time.Hour)
+	userRepo := persistence.NewInMemoryUserRepository()
+	c, _ := provideUserController(salt, key, ttl, userRepo)
 	tests := []userControllerTest{
 		userControllerTest{validUserSignIn, http.StatusCreated, true},
 		userControllerTest{noUsernameField, http.StatusBadRequest, false},
@@ -61,9 +71,13 @@ func TestUserSignUp(t *testing.T) {
 }
 
 func TestUserSignIn(t *testing.T) {
-	c, _ := provideUserController("123", "123", 12*time.Hour)
+	// Setup
+	userRepo := persistence.NewInMemoryUserRepository()
+	authService := auth.NewAuthService(salt, key, ttl)
+	userRepo.Create(aggregates.User{Id: "123", Username: "Jon Snow", PasswordHash: authService.GeneratePasswordHash("jonshow1")})
+	c, _ := provideUserController(salt, key, ttl, userRepo)
 	tests := []userControllerTest{
-		userControllerTest{validUserSignIn, http.StatusCreated, true},
+		userControllerTest{validUserSignIn, http.StatusOK, true},
 		userControllerTest{noUsernameField, http.StatusBadRequest, false},
 		userControllerTest{noPasswordField, http.StatusBadRequest, false},
 		userControllerTest{noRequiredFields, http.StatusBadRequest, false},

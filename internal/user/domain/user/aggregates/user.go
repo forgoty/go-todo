@@ -10,6 +10,7 @@ type User struct {
 	Id           string
 	Username     valueobjects.Username
 	PasswordHash string
+	UserProfile  valueobjects.UserProfile
 }
 
 func NewUser(c commands.RegisterUserCommand, pswHash string) (*User, error) {

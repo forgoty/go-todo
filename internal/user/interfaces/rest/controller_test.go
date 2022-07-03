@@ -73,8 +73,8 @@ func TestUserSignUp(t *testing.T) {
 func TestUserSignIn(t *testing.T) {
 	// Setup
 	userRepo := persistence.NewInMemoryUserRepository()
-	authService := auth.NewAuthService(salt, key, ttl)
-	userRepo.Create(aggregates.User{Id: "123", Username: "Jon Snow", PasswordHash: authService.GeneratePasswordHash("jonshow1")})
+	passMgr := auth.PasswordManager{salt}
+	userRepo.Create(aggregates.User{Id: "123", Username: "Jon Snow", PasswordHash: passMgr.HashPassword("jonshow1")})
 	c, _ := provideUserController(salt, key, ttl, userRepo)
 	tests := []userControllerTest{
 		userControllerTest{validUserSignIn, http.StatusOK, true},

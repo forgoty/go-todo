@@ -17,7 +17,8 @@ import (
 func provideUserController(salt auth.Salt, signinKey auth.SignInKey, tokenTTL time.Duration, userRepo aggregates.IUserRepository) (*userController, error) {
 	wire.Build(
 		app.NewUserApplication,
-		auth.NewAuthService,
+		wire.Struct(new(auth.PasswordManager), "*"),
+		wire.Struct(new(auth.JWTService), "*"),
 		login.NewLoginService,
 		register.NewRegisterService,
 		contexthandler.NewContextHandler,

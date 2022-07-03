@@ -10,22 +10,22 @@ import (
 )
 
 type RegisterService struct {
-	log         logger.Logger
-	userRepo    aggregates.IUserRepository
-	authService *auth.AuthService
+	log      logger.Logger
+	userRepo aggregates.IUserRepository
+	passMgr  *auth.PasswordManager
 }
 
-func NewRegisterService(userRepo aggregates.IUserRepository, as *auth.AuthService) *RegisterService {
+func NewRegisterService(userRepo aggregates.IUserRepository, pswmgr *auth.PasswordManager) *RegisterService {
 	log := logger.New("registerService")
 	return &RegisterService{
-		log:         log,
-		userRepo:    userRepo,
-		authService: as,
+		log:      log,
+		userRepo: userRepo,
+		passMgr:  pswmgr,
 	}
 }
 
 func (rs *RegisterService) RegisterUser(c commands.RegisterUserCommand) error {
-	encryptedPassword := rs.authService.GeneratePasswordHash(c.Password)
+	encryptedPassword := rs.passMgr.HashPassword(c.Password)
 	user, err := aggregates.NewUser(c, encryptedPassword)
 	if err != nil {
 		return err

@@ -37,10 +37,10 @@ func (r *InMemoryUserRepository) Create(u aggregates.User) error {
 	return nil
 }
 
-func (r *InMemoryUserRepository) FindOneByUsernameAndPassword(username, password string) (*aggregates.User, error) {
+func (r *InMemoryUserRepository) FindOneByUsername(username string) (*aggregates.User, error) {
 	r.l.Info("Users DB:", r.users)
 	for id := range r.users {
-		if r.users[id].Username.Equals(username) && r.users[id].PasswordHash == password {
+		if r.users[id].Username.Equals(username) {
 			return r.users[id], nil
 		}
 	}

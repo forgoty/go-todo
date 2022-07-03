@@ -13,16 +13,16 @@ import (
 )
 
 type ContextHandler struct {
-	userApp     *userapp.Application // replace with a Bus
-	authService *auth.AuthService
-	logger      logger.Logger
+	userApp    *userapp.Application // replace with a Bus
+	jwtService *auth.JWTService
+	logger     logger.Logger
 }
 
-func NewContextHandler(u *userapp.Application, a *auth.AuthService) *ContextHandler {
+func NewContextHandler(u *userapp.Application, jwtService *auth.JWTService) *ContextHandler {
 	return &ContextHandler{
-		userApp:     u,
-		authService: a,
-		logger:      logger.New("contexthandler"),
+		userApp:    u,
+		logger:     logger.New("contexthandler"),
+		jwtService: jwtService,
 	}
 }
 
@@ -54,7 +54,7 @@ func (h *ContextHandler) initContextWithJWT(ctx *models.ReqContext) bool {
 		}
 	}
 
-	userId, err := h.authService.ParseToken(headerParts[1])
+	userId, err := h.jwtService.ParseToken(headerParts[1])
 	if err != nil {
 		h.logger.Debug("Failed to verify JWT", "error", err)
 		if resErr := ctx.JSON(401, "Unauthorized"); resErr != nil {

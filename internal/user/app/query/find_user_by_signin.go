@@ -8,7 +8,6 @@ import (
 
 type FindUserBySigninQuery struct {
 	Username string
-	Password string
 }
 
 type FindUserBySigninQueryHandler struct {
@@ -24,7 +23,7 @@ func ProvideFindUserBySigninQueryHandler(repo aggregates.IUserRepository) *FindU
 }
 
 func (h FindUserBySigninQueryHandler) Handle(q FindUserBySigninQuery) (*models.UserDto, error) {
-	u, err := h.userRepo.FindOneByUsernameAndPassword(q.Username, q.Password)
+	u, err := h.userRepo.FindOneByUsername(q.Username)
 	if err != nil {
 		return nil, err
 	}

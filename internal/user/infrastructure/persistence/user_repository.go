@@ -1,8 +1,6 @@
 package persistence
 
 import (
-	"errors"
-
 	"github.com/forgoty/go-todo/internal/user/domain/user/aggregates"
 	"github.com/forgoty/go-todo/pkg/infrastructure/logger"
 )
@@ -23,16 +21,16 @@ func (r *InMemoryUserRepository) FindOneById(id string) (*aggregates.User, error
 	r.l.Info("Users DB:", r.users)
 	u, ok := r.users[id]
 	if !ok {
-		return nil, errors.New("Not Found!")
+		return nil, UserNotFound
 	}
 	return u, nil
 }
 
 func (r *InMemoryUserRepository) Create(u aggregates.User) error {
-	if _, ok := r.users[u.Username.String()]; ok {
+	if _, ok := r.users[u.Id]; ok {
 		return ErrInvalidCredsOrNotFound
 	}
-	r.users[u.Username.String()] = &u
+	r.users[u.Id] = &u
 	r.l.Info("Users DB:", r.users)
 	return nil
 }

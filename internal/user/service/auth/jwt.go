@@ -9,7 +9,7 @@ import (
 
 type tokenClaims struct {
 	jwt.StandardClaims
-	UserId string `json:"user_id"`
+	UserId string `json:"userId"`
 }
 type SignInKey string
 

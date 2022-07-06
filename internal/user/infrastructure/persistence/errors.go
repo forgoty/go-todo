@@ -8,4 +8,5 @@ func (e persistenceError) Error() string {
 
 const (
 	ErrInvalidCredsOrNotFound persistenceError = "No account found with the given credentials"
+	UserNotFound              persistenceError = "User Not Found"
 )

@@ -22,12 +22,12 @@ func ProvideFindUserBySigninQueryHandler(repo aggregates.IUserRepository) *FindU
 	}
 }
 
-func (h FindUserBySigninQueryHandler) Handle(q FindUserBySigninQuery) (*models.UserDto, error) {
+func (h FindUserBySigninQueryHandler) Handle(q FindUserBySigninQuery) (*models.UserIdentityDto, error) {
 	u, err := h.userRepo.FindOneByUsername(q.Username)
 	if err != nil {
 		return nil, err
 	}
-	return &models.UserDto{
+	return &models.UserIdentityDto{
 		Id:       u.Id,
 		Username: string(u.Username),
 	}, nil

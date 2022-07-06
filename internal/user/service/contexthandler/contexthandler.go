@@ -8,7 +8,6 @@ import (
 	userquery "github.com/forgoty/go-todo/internal/user/app/query"
 	"github.com/forgoty/go-todo/internal/user/service/auth"
 	"github.com/forgoty/go-todo/pkg/infrastructure/logger"
-	"github.com/forgoty/go-todo/pkg/models"
 	"github.com/forgoty/go-todo/pkg/web"
 )
 
@@ -17,6 +16,14 @@ type ContextHandler struct {
 	jwtService *auth.JWTService
 	logger     logger.Logger
 }
+
+type SignedInUser struct {
+	UserId      string
+	Username    string
+	IsAnonymous bool
+}
+
+const UserKey = "user"
 
 func NewContextHandler(u *userapp.Application, jwtService *auth.JWTService) *ContextHandler {
 	return &ContextHandler{
@@ -28,19 +35,15 @@ func NewContextHandler(u *userapp.Application, jwtService *auth.JWTService) *Con
 
 func (h *ContextHandler) Middleware(next web.HandlerFunc) web.HandlerFunc {
 	return func(c web.Context) error {
-		reqContext := &models.ReqContext{
-			Context: c,
-		}
-
 		switch {
-		case h.initContextWithJWT(reqContext):
-		case h.initContextWithAnonymousUser(reqContext):
+		case h.initContextWithJWT(c):
+		case h.initContextWithAnonymousUser(c):
 		}
-		return next(reqContext)
+		return next(c)
 	}
 }
 
-func (h *ContextHandler) initContextWithJWT(ctx *models.ReqContext) bool {
+func (h *ContextHandler) initContextWithJWT(ctx web.Context) bool {
 	authHeader := ctx.Request().Header.Get("Authorization")
 	if authHeader == "" {
 		return false
@@ -74,19 +77,18 @@ func (h *ContextHandler) initContextWithJWT(ctx *models.ReqContext) bool {
 		return true
 	}
 
-	ctx.SignedInUser = &models.SignedInUser{
+	ctx.Set(UserKey, SignedInUser{
 		UserId:      user.Id,
 		Username:    user.Username,
 		IsAnonymous: false,
-	}
-	ctx.IsSignedIn = true
+	})
 
 	return true
 }
 
-func (h *ContextHandler) initContextWithAnonymousUser(reqContext *models.ReqContext) bool {
-	reqContext.IsSignedIn = false
-	reqContext.AllowAnonymous = true
-	reqContext.SignedInUser = &models.SignedInUser{IsAnonymous: true}
+func (h *ContextHandler) initContextWithAnonymousUser(ctx web.Context) bool {
+	ctx.Set(UserKey, SignedInUser{
+		IsAnonymous: true,
+	})
 	return true
 }

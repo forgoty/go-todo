@@ -6,8 +6,15 @@ import (
 	"github.com/forgoty/go-todo/pkg/infrastructure/logger"
 )
 
+const (
+	ANON = iota
+	SIGNED
+	SELF
+)
+
 type GetUserQuery struct {
-	Id string `json:"id"`
+	Id   string
+	Mode uint
 }
 
 type GetUserQueryHandler struct {
@@ -22,12 +29,28 @@ func ProvideGetUserQueryHandler(repo aggregates.IUserRepository) *GetUserQueryHa
 	}
 }
 
+// TODO Make hiden fields calculated in api layer
 func (h *GetUserQueryHandler) Handle(q GetUserQuery) (*models.UserDto, error) {
 	u, err := h.userRepo.FindOneById(q.Id)
 	if err != nil {
 		return nil, err
 	}
-	return &models.UserDto{
-		Username: string(u.Username),
-	}, nil
+	dto := &models.UserDto{
+		Id:        u.Id,
+		Username:  string(u.Username),
+		FirstName: u.UserProfile.FirstName,
+		LastName:  u.UserProfile.LastName,
+	}
+	switch q.Mode {
+	case SIGNED:
+		{
+			dto.Personal = u.UserProfile.PersonalField
+		}
+	case SELF:
+		{
+			dto.Personal = u.UserProfile.PersonalField
+			dto.Secret = u.UserProfile.SecretField
+		}
+	}
+	return dto, nil
 }

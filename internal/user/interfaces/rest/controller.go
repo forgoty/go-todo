@@ -23,4 +23,5 @@ func RegisterRoutesAndMiddlewares(r routing.RouteRegister, m *web.Handler) {
 
 	r.Post("/signin", c.signin)
 	r.Post("/signup", c.signup)
+	r.Get("/user/:id", c.getUserById)
 }

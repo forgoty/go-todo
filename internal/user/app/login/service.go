@@ -4,7 +4,6 @@ import (
 	"errors"
 
 	"github.com/forgoty/go-todo/internal/user/domain/user/aggregates"
-	"github.com/forgoty/go-todo/internal/user/domain/user/commands"
 	"github.com/forgoty/go-todo/internal/user/service/auth"
 	"github.com/forgoty/go-todo/pkg/infrastructure/logger"
 )
@@ -28,7 +27,7 @@ func NewLoginService(userRepo aggregates.IUserRepository, passMgr *auth.Password
 	}
 }
 
-func (ls *LoginService) LoginUserJWT(c commands.LoginUserWithJWTCommand) (string, error) {
+func (ls *LoginService) LoginUserJWT(c LoginUserWithJWTCommand) (string, error) {
 	user, err := ls.userRepo.FindOneByUsername(c.Username)
 	if err != nil {
 		return "", err

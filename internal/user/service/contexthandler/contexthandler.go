@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	userapp "github.com/forgoty/go-todo/internal/user/app"
-	userquery "github.com/forgoty/go-todo/internal/user/app/query"
+	"github.com/forgoty/go-todo/internal/user/app/user/getuser"
 	"github.com/forgoty/go-todo/internal/user/service/auth"
 	"github.com/forgoty/go-todo/pkg/infrastructure/logger"
 	"github.com/forgoty/go-todo/pkg/web"
@@ -67,7 +67,7 @@ func (h *ContextHandler) initContextWithJWT(ctx web.Context) bool {
 	}
 
 	// TODO: Send via Bus
-	query := userquery.GetUserQuery{Id: userId}
+	query := getuser.GetUserQuery{Id: userId}
 	user, err := h.userApp.Queries.GetUser.Handle(query)
 	if err != nil {
 		h.logger.Debug("Failed to find user using JWT claims", "error", err)

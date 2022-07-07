@@ -1,9 +1,4 @@
-package models
-
-type UserIdentityDto struct {
-	Id       string `json:"id"`
-	Username string `json:"username"`
-}
+package getuser
 
 type UserDto struct {
 	Id        string `json:"id"`

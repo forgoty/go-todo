@@ -1,8 +1,9 @@
 package app
 
 import (
-	"github.com/forgoty/go-todo/internal/user/app/command"
-	"github.com/forgoty/go-todo/internal/user/app/query"
+	"github.com/forgoty/go-todo/internal/user/app/login"
+	"github.com/forgoty/go-todo/internal/user/app/register"
+	"github.com/forgoty/go-todo/internal/user/app/user/getuser"
 )
 
 type Application struct {
@@ -11,11 +12,10 @@ type Application struct {
 }
 
 type Commands struct {
-	RegiseterUser *command.RegisterUserCommandHandler
-	LoginUserJWT  *command.LoginUserWithJWTCommandHandler
+	RegiseterUser *register.RegisterUserCommandHandler
+	LoginUserJWT  *login.LoginUserWithJWTCommandHandler
 }
 
 type Queries struct {
-	FindUserBySignin *query.FindUserBySigninQueryHandler
-	GetUser          *query.GetUserQueryHandler
+	GetUser *getuser.GetUserQueryHandler
 }

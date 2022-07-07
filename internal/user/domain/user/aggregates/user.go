@@ -1,7 +1,6 @@
 package aggregates
 
 import (
-	"github.com/forgoty/go-todo/internal/user/domain/user/commands"
 	"github.com/forgoty/go-todo/internal/user/domain/user/valueobjects"
 	"github.com/forgoty/go-todo/pkg/errorcollector"
 )
@@ -13,13 +12,13 @@ type User struct {
 	UserProfile  valueobjects.UserProfile
 }
 
-func NewUser(c commands.RegisterUserCommand, pswHash string) (*User, error) {
+func NewUser(id, username, password, pswHash string) (*User, error) {
 	collector := make(errorcollector.Fields)
-	_, err := valueobjects.NewPassword(c.Password)
+	_, err := valueobjects.NewPassword(password)
 	if err != nil {
 		collector.Add("password", err)
 	}
-	username, err := valueobjects.NewUsername(c.Username)
+	usernameVo, err := valueobjects.NewUsername(username)
 	if err != nil {
 		collector.Add("username", err)
 	}
@@ -27,8 +26,8 @@ func NewUser(c commands.RegisterUserCommand, pswHash string) (*User, error) {
 		return nil, err
 	}
 	return &User{
-		Id:           c.Id,
-		Username:     username,
+		Id:           id,
+		Username:     usernameVo,
 		PasswordHash: pswHash,
 	}, nil
 }

@@ -1,4 +1,4 @@
-package commands
+package register
 
 type RegisterUserCommand struct {
 	Id       string

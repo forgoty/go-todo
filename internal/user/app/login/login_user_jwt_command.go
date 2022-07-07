@@ -1,4 +1,4 @@
-package commands
+package login
 
 type LoginUserWithJWTCommand struct {
 	Username string

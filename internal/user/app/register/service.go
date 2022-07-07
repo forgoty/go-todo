@@ -4,7 +4,6 @@ import (
 	"errors"
 
 	"github.com/forgoty/go-todo/internal/user/domain/user/aggregates"
-	"github.com/forgoty/go-todo/internal/user/domain/user/commands"
 	"github.com/forgoty/go-todo/internal/user/service/auth"
 	"github.com/forgoty/go-todo/pkg/infrastructure/logger"
 )
@@ -24,9 +23,9 @@ func NewRegisterService(userRepo aggregates.IUserRepository, pswmgr *auth.Passwo
 	}
 }
 
-func (rs *RegisterService) RegisterUser(c commands.RegisterUserCommand) error {
+func (rs *RegisterService) RegisterUser(c RegisterUserCommand) error {
 	encryptedPassword := rs.passMgr.HashPassword(c.Password)
-	user, err := aggregates.NewUser(c, encryptedPassword)
+	user, err := aggregates.NewUser(c.Id, c.Username, c.Password, encryptedPassword)
 	if err != nil {
 		return err
 	}

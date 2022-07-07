@@ -3,7 +3,7 @@ package rest
 import (
 	"net/http"
 
-	"github.com/forgoty/go-todo/internal/user/app/query"
+	"github.com/forgoty/go-todo/internal/user/app/user/getuser"
 	"github.com/forgoty/go-todo/internal/user/service/contexthandler"
 	api_models "github.com/forgoty/go-todo/pkg/api/models"
 	"github.com/forgoty/go-todo/pkg/web"
@@ -21,17 +21,17 @@ func (c *userController) getUserById(ctx web.Context) error {
 		return ctx.JSON(http.StatusBadRequest, api_models.APIError{Message: "Could not parse field: id"})
 	}
 	requestUser := ctx.Get(contexthandler.UserKey).(contexthandler.SignedInUser)
-	var mode uint
+	var mode getuser.Mode
 	switch {
 	case requestUser.IsAnonymous:
-		mode = query.ANON
+		mode = getuser.ANONYMOUS
 	case requestUser.UserId == ctx.Param("id"):
-		mode = query.SELF
+		mode = getuser.SELF
 	default:
-		mode = query.SIGNED
+		mode = getuser.SIGNED
 	}
 
-	userQuery := query.GetUserQuery{
+	userQuery := getuser.GetUserQuery{
 		Id:   ctx.Param("id"),
 		Mode: mode,
 	}

@@ -4,7 +4,8 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/forgoty/go-todo/internal/user/domain/user/commands"
+	"github.com/forgoty/go-todo/internal/user/app/login"
+	"github.com/forgoty/go-todo/internal/user/app/register"
 	"github.com/forgoty/go-todo/internal/user/interfaces/rest/models"
 	api_models "github.com/forgoty/go-todo/pkg/api/models"
 	"github.com/forgoty/go-todo/pkg/errorcollector"
@@ -37,7 +38,7 @@ func (c *userController) signin(ctx web.Context) error {
 		return ctx.JSON(http.StatusBadRequest, api_models.APIError{Message: err.Error()})
 	}
 
-	command := commands.LoginUserWithJWTCommand{
+	command := login.LoginUserWithJWTCommand{
 		Username: dto.Username,
 		Password: dto.Password,
 	}
@@ -74,7 +75,7 @@ func (c *userController) signup(ctx web.Context) error {
 		return ctx.JSON(http.StatusBadRequest, api_models.APIError{Message: err.Error()})
 	}
 
-	command := commands.RegisterUserCommand{
+	command := register.RegisterUserCommand{
 		Id:       uuid.New().String(),
 		Username: dto.Username,
 		Password: dto.Password,

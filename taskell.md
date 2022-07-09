@@ -12,10 +12,11 @@
     * [x] All fields except Personal value and secret should be visible for anonymous user
     * [ ] add update User endpoint
     * [ ] 
+- write more tests
 
 ## Doing
 
-- write more tests
+- use of mediator to connect commands and handlers
 
 ## Done
 

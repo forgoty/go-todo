@@ -13,7 +13,7 @@ import (
 // @Description  Get user by Id.
 // @Accept       json
 // @Produce      json
-// @Success      200         {object}  query_models.UserDto "User found"
+// @Success      200         {object}  getuser.UserDto "User found"
 // @BasePath     api/v1/user
 // @Router       /api/v1/user/{id} [get]
 func (c *userController) getUserById(ctx web.Context) error {

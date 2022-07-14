@@ -34,4 +34,8 @@ swagger:
 delete_wire:
 	find . -name "*_gen.go" -exec rm -f {} \;
 
+.PHONY: build_docker_release
+build_docker_release:
+	docker build -f docker/release/Dockerfile .
+
 .DEFAULT_GOAL := build

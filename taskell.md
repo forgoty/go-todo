@@ -13,10 +13,10 @@
     * [ ] add update User endpoint
     * [ ] 
 - write more tests
+- use of mediator to connect commands and handlers
 
 ## Doing
 
-- use of mediator to connect commands and handlers
 
 ## Done
 
@@ -27,3 +27,4 @@
 - Add validation
     * [x] Add payload validation to sign-in
     * [x] Add payload validation to sign-up
+- Update golang to 1.18

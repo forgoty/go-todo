@@ -86,9 +86,52 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/api/v1/user/{id}": {
+            "get": {
+                "description": "Get user by Id.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get user by Id",
+                "responses": {
+                    "200": {
+                        "description": "User found",
+                        "schema": {
+                            "$ref": "#/definitions/getuser.UserDto"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "getuser.UserDto": {
+            "type": "object",
+            "properties": {
+                "firstName": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "personal": {
+                    "type": "string"
+                },
+                "secret": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
         "models.APIError": {
             "type": "object",
             "properties": {
@@ -107,10 +150,6 @@ const docTemplate = `{
         },
         "models.UserSignInSignUp": {
             "type": "object",
-            "required": [
-                "password",
-                "username"
-            ],
             "properties": {
                 "password": {
                     "type": "string"

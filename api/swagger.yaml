@@ -1,4 +1,19 @@
 definitions:
+  getuser.UserDto:
+    properties:
+      firstName:
+        type: string
+      id:
+        type: string
+      lastName:
+        type: string
+      personal:
+        type: string
+      secret:
+        type: string
+      username:
+        type: string
+    type: object
   models.APIError:
     properties:
       message:
@@ -15,9 +30,6 @@ definitions:
         type: string
       username:
         type: string
-    required:
-    - password
-    - username
     type: object
 info:
   contact: {}
@@ -71,4 +83,17 @@ paths:
           schema:
             $ref: '#/definitions/models.APIError'
       summary: User sign-up
+  /api/v1/user/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get user by Id.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User found
+          schema:
+            $ref: '#/definitions/getuser.UserDto'
+      summary: Get user by Id
 swagger: "2.0"

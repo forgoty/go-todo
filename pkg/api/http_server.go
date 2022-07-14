@@ -36,7 +36,7 @@ func (hs *HTTPServer) Run(ctx context.Context, port string) error {
 	hs.context = ctx
 
 	hs.httpSrv = &http.Server{
-		Addr:    net.JoinHostPort("localhost", port),
+		Addr:    net.JoinHostPort("0.0.0.0", port),
 		Handler: hs.web,
 	}
 

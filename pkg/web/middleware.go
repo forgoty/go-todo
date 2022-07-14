@@ -6,3 +6,4 @@ import (
 
 var MiddlewareLogger = middleware.Logger
 var MiddlewareRecover = middleware.Recover
+var MiddlewareCORS = middleware.CORS

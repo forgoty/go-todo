@@ -16,6 +16,7 @@ func (hs *HTTPServer) registerRoutes() {
 
 	m.Use(web.MiddlewareLogger())
 	m.Use(web.MiddlewareRecover())
+	m.Use(web.MiddlewareCORS())
 
 	r.Get("/swagger/*", web.SwaggerHander)
 
